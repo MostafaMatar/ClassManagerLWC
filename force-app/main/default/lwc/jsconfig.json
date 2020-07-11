@@ -1,0 +1,44 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "baseUrl": ".",
+        "paths": {
+            "c/classDetail": [
+                "classDetail/classDetail.js"
+            ],
+            "c/classesList": [
+                "classesList/classesList.js"
+            ],
+            "c/homeComponent": [
+                "homeComponent/homeComponent.js"
+            ],
+            "c/pubSub": [
+                "pubSub/pubSub.js"
+            ],
+            "c/studentFilter": [
+                "studentFilter/studentFilter.js"
+            ],
+            "c/studentList": [
+                "studentList/studentList.js"
+            ],
+            "c/studentSummary": [
+                "studentSummary/studentSummary.js"
+            ],
+            "c/teacherList": [
+                "teacherList/teacherList.js"
+            ],
+            "c/teacherSummary": [
+                "teacherSummary/teacherSummary.js"
+            ]
+        }
+    },
+    "include": [
+        "**/*",
+        "../../../../.sfdx/typings/lwc/**/*.d.ts"
+    ],
+    "typeAcquisition": {
+        "include": [
+            "jest"
+        ]
+    }
+}

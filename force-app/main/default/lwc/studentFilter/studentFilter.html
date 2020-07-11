@@ -1,0 +1,38 @@
+<!--
+  @File Name          : studentFilter.html
+  @Description        : 
+  @Author             : Mostafa Matar
+  @Group              : 
+  @Last Modified By   : Mostafa Matar
+  @Last Modified On   : 4/28/2020, 12:23:51 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    4/22/2020   Mostafa Matar     Initial Version
+-->
+<template>
+    <div class="slds-box slds-theme_default">
+        <p class="slds-text-heading_medium">Filters</p>
+        <!-- FILTER INPUTS -->
+        <lightning-layout multiple-rows="true" vertical-align="center">
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-input name="nameFilter" onchange={handleFilterChange} label="Name" type="text" value={name}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-input name="majorFilter" onchange={handleFilterChange} label="Major" type="text" value={major}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-input name="minGPAFilter" onchange={handleFilterChange} label="Min. GPA" type="number" step="0.1" min="0" max="5" value={minGPA}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-input name="maxGPAFilter" onchange={handleFilterChange} label="Max. GPA" type="number" step="0.1" min="0" max="5" value={maxGPA}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-button onclick={filterStudents} label="Apply Filters"></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

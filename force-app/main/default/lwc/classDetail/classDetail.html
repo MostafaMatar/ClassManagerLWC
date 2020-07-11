@@ -1,0 +1,176 @@
+<!--
+  @File Name          : classDetail.html
+  @Description        : 
+  @Author             : Mostafa Matar
+  @Group              : 
+  @Last Modified By   : Mostafa Matar
+  @Last Modified On   : 07-07-2020
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    5/7/2020   Mostafa Matar     Initial Version
+-->
+<template>
+    <div class="slds-box slds-theme_default">
+        <p class="slds-text-heading_large">{classData.className}</p><br />
+
+        <!-- LOADING SPINNER -->
+        <template if:true={loading}>
+            <lightning-spinner size="large" alternative-text="Searching Directory. Please, wait."></lightning-spinner>
+        </template>
+
+        <!-- VIEW CLASS-->
+        <template if:true={classData.className}>
+            <lightning-button class="slds-m-right_medium" onclick={showEditModal} label="Edit Class">
+            </lightning-button>
+            <lightning-button class="slds-m-right_medium " onclick={showStudentsModal}
+                label="Assign Students">
+            </lightning-button>
+            <lightning-button onclick={showTeacherModal} label="Assign Teacher">
+            </lightning-button><br />
+            <lightning-layout horizontal-align="center" vertical-align="center">
+                <lightning-layout-item size="2" padding="around-small">Teacher</lightning-layout-item>
+                <lightning-layout-item size="2" padding="around-small">{classData.teacher}</lightning-layout-item>
+                <lightning-layout-item size="2" padding="around-small">Duration</lightning-layout-item>
+                <lightning-layout-item size="2" padding="around-small">{classData.duration} Weeks</lightning-layout-item>
+                <lightning-layout-item size="2" padding="around-small">Level</lightning-layout-item>
+                <lightning-layout-item size="2" padding="around-small">{classData.level}</lightning-layout-item>
+            </lightning-layout>
+            <p class="slds-text-heading_small">Enrolled Students</p>
+            <template for:each={classData.students} for:item="student">
+                <div key={student.id} class="slds-m-around_medium">
+                    <c-student-summary person={student}></c-student-summary>
+                </div>
+            </template>
+        </template>
+        <template if:false={classData.className}>
+            <p class="slds-m-around_medium">Please select a class from the side panel</p>
+        </template>
+
+        <!-- EDIT CLASS MODAL -->
+        <template if:true={editModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon class="slds-modal__close" title="Close" icon-name="utility:close"
+                            icon-class="slds-button_icon-inverse" onclick={hideEditModal}></lightning-button-icon>
+                        <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                            Edit {newClassName}
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="editmodal-content-id-1">
+                        <div>
+                            <lightning-layout multiple-rows="true" vertical-align="center">
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <lightning-input onchange={editClassHandler} type="text" name="className"
+                                        label="Class Name" value={newClassName}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <label for="FieldSelect" class="slds-form-element__label slds-no-flex">
+                                        Class Level
+                                    </label>
+                                    <select class="slds-select" name="classLevel" onchange={editClassHandler}>
+                                        <option value="Freshmen">Freshmen</option>
+                                        <option value="Juniors">Juniors</option>
+                                        <option value="Seniors">Seniors</option>
+                                    </select>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <lightning-input onchange={editClassHandler} max-length="5" type="number" step="1"
+                                        name="classDuration" label="Duration in Weeks" value={newClassDuration}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="brand" label="Save" onclick={saveClassData}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- STUDENTS MODAL -->
+        <template if:true={studentsModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon class="slds-modal__close" title="Close" icon-name="utility:close"
+                            icon-class="slds-button_icon-inverse" onclick={hideStudentsModal}></lightning-button-icon>
+                        <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                            Class Students
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="studentModalContent">
+                        <div>
+                            <lightning-layout multiple-rows="true" vertical-align="center">
+                                <lightning-layout-item size="5" padding="around-small">
+                                    <select onchange={studentToAddChanged} size="10">
+                                        <template for:each={availableStudents} for:item="s">
+                                            <option key={s.Id} value={s.Id}>{s.Name}</option>
+                                        </template>
+                                    </select>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="2" padding="around-small">
+                                    <lightning-button-icon icon-name="utility:chevronright" onclick={addStudent}></lightning-button-icon><br />
+                                    <lightning-button-icon icon-name="utility:chevronleft" onclick={removeStudent} ></lightning-button-icon>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="5" padding="around-small">
+                                    <select onchange={studentToRemoveChanged} size="10">
+                                        <template for:each={enrolledStudents} for:item="s">
+                                            <option key={s.Id} value={s.Id}>{s.Name}</option>
+                                        </template>
+                                    </select>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="brand" label="Save" onclick={upsertClassStudents}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- TEACHER MODAL -->
+        <template if:true={teacherModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon class="slds-modal__close" title="Close" icon-name="utility:close"
+                            icon-class="slds-button_icon-inverse" onclick={hideTeacherModal}></lightning-button-icon>
+                        <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                            Class Teacher
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="teacherModalContent">
+                        <div>
+                            <lightning-layout multiple-rows="true" vertical-align="center">
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <label for="FieldSelect" class="slds-form-element__label slds-no-flex">
+                                        Class Teacher
+                                    </label>
+                                    <select class="slds-select" name="classTeacher" onchange={editTeacherHandler}>
+                                        <option value="">---None---</option>
+                                        <template for:each={teachers} for:item="teacher">
+                                            <option key={teacher.Id} value={teacher.Id}>{teacher.Name}</option>
+                                        </template>
+                                    </select>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="brand" label="Save" onclick={assignClassTeacher}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </div>
+</template>

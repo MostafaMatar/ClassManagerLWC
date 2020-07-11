@@ -1,0 +1,42 @@
+<!--
+  @File Name          : homeComponent.html
+  @Description        : 
+  @Author             : Mostafa Matar
+  @Group              : 
+  @Last Modified By   : Mostafa Matar
+  @Last Modified On   : 07-11-2020
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    4/19/2020   Mostafa Matar     Initial Version
+-->
+<template>
+    <div class="slds-box slds-theme_default">
+        <!-- WLCOME MESSAGE -->
+        <div class="slds-align_absolute-center">
+            <p class="slds-text-heading_large">
+                Welcome to Class Manager
+            </p>
+        </div>
+        <div class="slds-align_absolute-center">
+            <p class="slds-text-heading_small slds-m-around_small">
+                Use the following buttons to navigate the app or check the below charts for some insights on your data 
+            </p>
+        </div>
+        <!--NAVIGATION BUTTONS -->
+        <lightning-layout class="slds-m-around_medium">
+
+            <lightning-layout-item size="4" padding="around-small" class="slds-align_absolute-center">
+                <button name="classPage" onclick={navigateToPage} class="slds-button slds-button_success slds-size_full">Classes Manager</button>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="4" padding="around-small" class="slds-align_absolute-center">
+                <button name="studentPage" onclick={navigateToPage} class="slds-button slds-button_success slds-size_full">Students Directory</button>
+            </lightning-layout-item>
+            
+            <lightning-layout-item size="4" padding="around-small" class="slds-align_absolute-center">
+                <button name="teacherPage" onclick={navigateToPage} class="slds-button slds-button_success slds-size_full">Teachers Directory</button>
+            </lightning-layout-item>
+
+        </lightning-layout>
+    </div>
+</template>

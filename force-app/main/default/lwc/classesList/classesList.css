@@ -1,0 +1,4 @@
+.classItem:hover{
+    border-color:blue;
+    cursor: pointer;
+}

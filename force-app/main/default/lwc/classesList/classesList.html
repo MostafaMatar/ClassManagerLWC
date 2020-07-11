@@ -1,0 +1,78 @@
+<!--
+  @File Name          : classesList.html
+  @Description        : 
+  @Author             : Mostafa Matar
+  @Group              : 
+  @Last Modified By   : Mostafa Matar
+  @Last Modified On   : 07-05-2020
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    5/6/2020   Mostafa Matar     Initial Version
+-->
+<template>
+    <div class="slds-box slds-theme_default">
+        <p class="slds-text-heading_large">Classes</p>
+
+        <!-- LOADING SPINNER -->
+        <template if:true={loading}>
+            <lightning-spinner size="large" alternative-text="Searching Directory. Please, wait."></lightning-spinner>
+        </template>
+
+        <lightning-layout multiple-rows="true" vertical-align="center">
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-button onclick={showNewModal} variant="brand" label="New Class"></lightning-button>
+            </lightning-layout-item>
+            <template for:each={classes} for:item="cl">
+                <lightning-layout-item onclick={selectClass} name={cl.id} class="slds-box slds-m-around_small classItem" key={cl.id} size="12"
+                    padding="around-small">
+                    <lightning-formatted-text value={cl.className} onclick={selectClass} name={cl.id} class="slds-text-heading_small"></lightning-formatted-text>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+
+        <!-- NEW CLASS MODAL -->
+        <template if:true={newModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon class="slds-modal__close" title="Close" icon-name="utility:close"
+                            icon-class="slds-button_icon-inverse" onclick={hideNewModal}></lightning-button-icon>
+                        <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                            New Class
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="editmodal-content-id-1">
+                        <div>
+                            <lightning-layout multiple-rows="true" vertical-align="center">
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <lightning-input onchange={saveClassChangeHandler} type="text" name="className"
+                                        label="Class Name" value={newClassName}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <lightning-input onchange={saveClassChangeHandler} type="number" step="1"
+                                        name="classDuration" label="Class Duration in Weeks" value={newClassLevel}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <label for="FieldSelect" class="slds-form-element__label slds-no-flex">
+                                        Class Level
+                                    </label>
+                                    <select class="slds-select" name="classLevel" onchange={saveClassChangeHandler}>
+                                        <option value="Freshmen">Freshmen</option>
+                                        <option value="Juniors">Juniors</option>
+                                        <option value="Seniors">Seniors</option>
+                                    </select>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="brand" label="Save" onclick={saveClass}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

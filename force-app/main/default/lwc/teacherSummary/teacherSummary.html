@@ -1,0 +1,127 @@
+<!--
+  @description       : 
+  @author            : Mostafa Matar
+  @group             : 
+  @last modified on  : 07-11-2020
+  @last modified by  : Mostafa Matar
+  Modifications Log 
+  Ver   Date         Author          Modification
+  1.0   07-11-2020   Mostafa Matar   Initial Version
+-->
+
+<template>
+    <div class="slds-box slds-theme_default slds-p-around_small slds-m-around_small">
+        <!-- TEACHER DATA SUMMARY -->
+        <div class="slds-grid slds-gutters slds-wrap">
+            <div class="slds-col slds-size_1-of-3">
+                <!-- profile pictures -->
+                <template if:true={profilePicExists}>
+                    <img alt="profilepic" src={teacher.Teacher_Photo__c} style="max-width: 120px;" />
+                </template>
+                <template if:false={profilePicExists}>
+                    <lightning-icon icon-name="utility:user" size="large" alternative-text="profilepic" title="Person">
+                    </lightning-icon>
+                </template><br /><br />
+                <!-- view and edit student details modals  -->
+                <lightning-button class="slds-m-right_medium" onclick={showViewModal} label="View Details">
+                </lightning-button>
+                <lightning-button onclick={showEditModal} label="Edit Details">
+                </lightning-button>
+            </div>
+            <!-- student data -->
+            <div class="slds-col slds-size_2-of-3">
+                <p class="slds-text-heading_medium slds-m-bottom_small">{teacher.Name}</p>
+                <p class="slds-text-heading_small">{teacher.Teacher_Bio__c}</p>
+            </div>
+        </div>
+        
+        <!-- VIEW STUDENT MODAL -->
+        <template if:true={viewModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon class="slds-modal__close" title="Close" icon-name="utility:close"
+                            icon-class="slds-button_icon-inverse" onclick={hideViewModal}></lightning-button-icon>
+                        <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                            {teacher.Name}
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-3">
+                                <template if:true={profilePicExists}>
+                                    <img alt="profilepic" src={teacher.Teacher_Photo__c} style="max-width: 120px;" />
+                                </template>
+                                <template if:false={profilePicExists}>
+                                    <lightning-icon icon-name="utility:user" size="large" alternative-text="profilepic"
+                                        title="Person">
+                                    </lightning-icon>
+                                </template>
+                            </div>
+                            <div class="slds-col slds-size_2-of-3">
+                                <p><b>Bio</b> : {teacher.Teacher_Bio__c}</p>
+                                <p><b>Email</b> : {teacher.Teacher_EMail__c}</p>
+                                <p><b>Rating</b> : {teacher.Teacher_Rating__c}</p><br />
+                                <!--<p class="slds-text-heading_small">Classes</p>
+                                <ul class="slds-has-dividers_bottom-space">
+                                    <template for:each={teacher.Classes__r} for:item="course">
+                                        <li class="slds-item" key={course.Id}>{course.Name}</li>
+                                    </template>
+                                </ul>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <!-- EDIT STUDENT MODAL -->
+        <template if:true={editModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon class="slds-modal__close" title="Close" icon-name="utility:close"
+                            icon-class="slds-button_icon-inverse" onclick={hideEditModal}></lightning-button-icon>
+                        <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                            Edit {newName}
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="editmodal-content-id-1">
+                        <div>
+                            <lightning-layout multiple-rows="true" vertical-align="center">
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <lightning-input onchange={editTeacherChangeHandler} type="text" name="nameInput"
+                                        label="Teacher Name" value={newName}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <lightning-input onchange={editTeacherChangeHandler} type="text" name="bioInput"
+                                        label="Teacher Bio" value={newBio}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <lightning-input onchange={editTeacherChangeHandler} max="5" type="number" step="0.1"
+                                        name="ratingInput" label="Teacher Rating" value={newRating}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <lightning-input onchange={editTeacherChangeHandler} type="text" name="emailInput"
+                                        label="Teacher Email" value={newEmail}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small">
+                                    <lightning-input onchange={editTeacherChangeHandler} type="url"
+                                        name="photoInput" label="Teacher Profile Picture" value={newPhoto}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="brand" label="Save" onclick={saveTeacher}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>
